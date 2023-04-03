@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect , useRef } from "react";
 import { auth,  db } from "../firebase-config";
 import { useState } from "react";
 import {addDoc, collection, onSnapshot, orderBy, query, serverTimestamp, where} from "firebase/firestore" // entry into a collection // one message in the table of messages collections
@@ -9,6 +9,7 @@ const Chat = ({room}) => {
     const [newMessage, setNewMessage] = useState("");
     const messagesRef = collection(db, "messages")
     const [messages, setMessages] = useState([]);
+    const lastDivRef = useRef(null)
     
     
     useEffect(()=>{
@@ -20,6 +21,9 @@ const Chat = ({room}) => {
                 messages.push({...doc.data(), id: doc.id})
             })
             setMessages(prev=> messages)
+            lastDivRef.current.scrollIntoView({
+                behavior: "smooth"
+              });
             console.log(messages)
         })
 
@@ -53,11 +57,15 @@ const Chat = ({room}) => {
             messages.map((message) => 
                 <div className="message" key={message.id}>
                 <span className="user">{message.user}</span>
-                <span>{message.text}</span>
+                <span className="messageText">{message.text}</span>
                 {/* <span>{message.createdAt.seconds}</span> */}
                 </div>
             )
         }
+
+        <div ref={lastDivRef}>
+
+        </div>
     </div>
     
     <form className="new-message-form">

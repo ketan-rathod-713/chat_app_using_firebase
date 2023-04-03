@@ -26,6 +26,8 @@ const Chat = ({room}) => {
         return ()=>{
             unsubscribe()
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleSubmit =async (e)=>{
